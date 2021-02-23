@@ -6,10 +6,18 @@ authors = ["m2tkl"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+fire = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+flake8 = "^3.8.4"
+mypy = "^0.812"
+autopep8 = "^1.5.5"
+pytest-cov = "^2.11.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+pc = 'src.pycoder.main:main'
