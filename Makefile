@@ -10,6 +10,9 @@ test: ## execute pytest
 testcov: ## execute pytest with coverage
 	poetry run pytest -v --cov=./src
 
+testout: ## execute pytest and print output
+	poetry run pytest -v --capture=no
+
 lint: ## execute lint by flake8
 	poetry run flake8 --exclude 'tests' --show-source ./src
 

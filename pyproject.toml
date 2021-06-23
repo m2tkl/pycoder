@@ -7,6 +7,9 @@ authors = ["m2tkl"]
 [tool.poetry.dependencies]
 python = "^3.9"
 fire = "^0.4.0"
+beautifulsoup4 = "^4.9.3"
+requests = "^2.25.1"
+html5lib = "^1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
