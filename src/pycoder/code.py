@@ -65,3 +65,24 @@ def prepare_contest(contest):
 
         if not os.path.exists(task_dir_name + '/tests/'):
             os.mkdir(task_dir_name + '/tests/')
+
+
+def init():
+    """atcoder用のディレクトリを作成する
+    """
+    base_dir = './atcoder/'
+    if not os.path.exists(base_dir):
+        os.mkdir(base_dir)
+
+    contests_dir = base_dir + 'contests/'
+    if not os.path.exists(contests_dir):
+        os.mkdir(contests_dir)
+
+    templates_dir = base_dir + 'templates/'
+    if not os.path.exists(templates_dir):
+        os.mkdir(templates_dir)
+
+    template_file = templates_dir + 'default.py'
+    if not os.path.exists(template_file):
+        default_template = pathlib.Path(template_file)
+        default_template.touch()
