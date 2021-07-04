@@ -109,7 +109,7 @@ def extract_sample_test_cases_from_prob_page(html: str) -> SampleTestCases:
     for i in range(0, len(io_samples), 2):
         try:
             sample_test_cases[(i//2)+1] = TestCase(io_samples[i],
-                                               io_samples[i+1])
+                                                   io_samples[i+1])
         except IndexError:
             sample_test_cases[(i//2)+1] = None
 

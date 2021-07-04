@@ -142,6 +142,7 @@ def check_cookies() -> Optional[Session]:
         session.cookies.update(cookies_stored)
         return session
 
+
 def check_login() -> Optional[Session]:
     """ログイン状態かどうかを確認する。
     ログイン済みであれば、cookieを更新する。
