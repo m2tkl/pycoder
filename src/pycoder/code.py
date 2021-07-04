@@ -3,6 +3,8 @@ from . import scrape
 from .scrape import SampleTestCases
 import os
 import pathlib
+import shutil
+
 
 def read_file(filepath: str) -> str:
     """ファイルの中身を返す
@@ -49,22 +51,32 @@ def prepare_contest(contest):
         os.makedirs(contest_dir)
 
     contest_test_cases = fetch_contet_test_cases(contest)
-    tasks = contest_test_cases.keys()
 
-    for task in tasks:
+    # 問題ごとのサブディレクトリを作成
+    for task in contest_test_cases.keys():
         task_dir_name = contest_dir + task + '/'
         if not os.path.exists(task_dir_name):
             os.mkdir(task_dir_name)
 
+        # 問題解答スクリプト用にテンプレートファイルをコピー
         main_script_path = task_dir_name + 'main.py'
         if not os.path.exists(main_script_path):
-            # 空のファイルを作成
-            # TODO: テンプレートを用意してコピーする機能を追加
-            main_script = pathlib.Path(main_script_path)
-            main_script.touch()
+            template_path = './atcoder/templates/default.py'
+            shutil.copy(template_path, main_script_path)
 
+        # テスト用のディレクトリを作成
         if not os.path.exists(task_dir_name + '/tests/'):
             os.mkdir(task_dir_name + '/tests/')
+
+    # 取得したテストケースを格納する
+    for task_name, test_cases in contest_test_cases.items():
+        for test_number, test_case in test_cases.items():
+            input_case_file = str(test_number) + '_input.txt'
+            output_case_file = str(test_number) + '_output.txt'
+            with open(contest_dir + task_name + '/tests/' + input_case_file, 'w') as f:
+                f.write(test_case.input)
+            with open(contest_dir + task_name + '/tests/' + output_case_file, 'w') as f:
+                f.write(test_case.output)
 
 
 def init():
