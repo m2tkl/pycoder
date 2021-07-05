@@ -2,7 +2,7 @@ import os
 import subprocess
 from enum import Enum, auto
 from utils.pycolor import pprint
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 from .auth import get_csrf_token, auth
 from requests import Session
 from . import scrape
@@ -27,8 +27,8 @@ class TestResult(Enum):
 class TestResponse(NamedTuple):
     result: TestResult
     input_val: str
-    expected_val: str
-    actual_val: str
+    expected_val: Optional[str]
+    actual_val: Optional[str]
 
 
 def get_test_case_dirs(contest, task_name):
@@ -46,13 +46,16 @@ def get_test_case_dirs(contest, task_name):
     return test_case_dirs
 
 
-def test_all(contest, task, verbose=False):
+def test_all(contest, task, name: str = None, verbose=False):
     print('contest: ', contest)
     print('task: ', task)
     test_dirs = get_test_case_dirs(contest, task)
     target_script = 'atcoder/contests/' + contest + '/' + task + '/main.py'
     all_res = True
     for test_name, test_dir in test_dirs:
+        if name is not None:
+            if str(name) != test_name:
+                continue
         res = test(test_name, test_dir, target_script, verbose=verbose)
         all_res &= res
     return all_res
@@ -71,6 +74,7 @@ def run_test(test_target_path, input_path, output_path) -> TestResponse:
     """
     """
     input_val = read_file(input_path)
+    expected_output = read_file(output_path)
     try:
         with open(input_path, 'r') as f:
             std = subprocess.run(
@@ -83,16 +87,13 @@ def run_test(test_target_path, input_path, output_path) -> TestResponse:
                 check=True,
             )
     except subprocess.TimeoutExpired:
-        res = TestResult.TLE
         actual_output = None
-        expected_output = None
+        res = TestResult.TLE
     except subprocess.CalledProcessError as e:
-        res = TestResult.RE
         actual_output = e.output.decode('utf-8').rstrip()
-        expected_output = None
+        res = TestResult.RE
     else:
         actual_output = std.stdout.decode('utf-8').rstrip()
-        expected_output = read_file(output_path)
         res = TestResult.OK if actual_output == expected_output else TestResult.NG
     return TestResponse(res, input_val, expected_output, actual_output)
 
@@ -143,9 +144,9 @@ def submit(session_logined: Session, contest, task, lang='p'):
     lang_id = langs.get_lang_id(lang)
 
     submit_info = {"data.TaskScreenName": task_screen_name,
-                    "csrf_token": csrf_token,
-                    "data.LanguageId": lang_id,
-                    "sourceCode": submit_src}
+                   "csrf_token": csrf_token,
+                   "data.LanguageId": lang_id,
+                   "sourceCode": submit_src}
     try:
         res = session_logined.post(submit_url, submit_info)
         res.raise_for_status()
