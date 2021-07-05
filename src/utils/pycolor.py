@@ -1,3 +1,4 @@
+from typing import Optional
 UNDERLINE = '\033[4m'
 INVISIBLE = '\033[08m'
 REVERCE = '\033[07m'
@@ -25,14 +26,14 @@ def paint(s: str, color='', bold=True) -> str:
     return res + END
 
 
-def pprint(s: str, color='', bold=True, end=None) -> None:
+def pprint(s: Optional[str], color='', bold=True, end=None) -> None:
     """文字を装飾してprintする
     @param s printする文字
     @param color 色
     @param bold 太字にするかどうか(デフォルトは太字)
     @param end printのオプション
     """
-    res = paint(s, color, bold)
+    res = paint(s, color, bold) if s is not None else ''
     print(res, end=end)
 
 

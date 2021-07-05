@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 lang_ids = {
     'python': 4006,
@@ -6,10 +6,9 @@ lang_ids = {
 }
 
 
-def get_lang_ids(lang_type: str) -> List[int]:
+def get_lang_id(lang_type: str) -> Optional[int]:
     if lang_type == 'p':
         return lang_ids['python']
     elif lang_type == 'pp':
         return lang_ids['pypy']
-    else:
-        return None
+    return None

@@ -71,7 +71,8 @@ def prepare_contest(contest):
     # 取得したテストケースを格納する
     for task_name, test_cases in contest_test_cases.items():
         for test_number, test_case in test_cases.items():
-            task_test_dir = contest_dir + task_name + '/tests/' + str(test_number) + '/'
+            task_test_dir = contest_dir + task_name + \
+                '/tests/' + str(test_number) + '/'
             os.mkdir(task_test_dir)
             with open(task_test_dir + 'in.txt', 'w') as f:
                 f.write(test_case.input)
