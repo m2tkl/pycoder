@@ -66,16 +66,16 @@ def prepare_contest(contest):
 
         # テスト用のディレクトリを作成
         if not os.path.exists(task_dir_name + '/tests/'):
-            os.mkdir(task_dir_name + '/tests/')
+            os.makedirs(task_dir_name + '/tests/')
 
     # 取得したテストケースを格納する
     for task_name, test_cases in contest_test_cases.items():
         for test_number, test_case in test_cases.items():
-            input_case_file = str(test_number) + '_input.txt'
-            output_case_file = str(test_number) + '_output.txt'
-            with open(contest_dir + task_name + '/tests/' + input_case_file, 'w') as f:
+            task_test_dir = contest_dir + task_name + '/tests/' + str(test_number) + '/'
+            os.mkdir(task_test_dir)
+            with open(task_test_dir + 'in.txt', 'w') as f:
                 f.write(test_case.input)
-            with open(contest_dir + task_name + '/tests/' + output_case_file, 'w') as f:
+            with open(task_test_dir + 'out.txt', 'w') as f:
                 f.write(test_case.output)
 
 
