@@ -1,7 +1,7 @@
 import os
 import subprocess
 from enum import Enum, auto
-from utils.pycolor import pprint
+from .pycolor import pprint
 from typing import NamedTuple, Optional
 from .auth import get_csrf_token, auth
 from requests import Session
