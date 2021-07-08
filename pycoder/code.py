@@ -82,6 +82,9 @@ def prepare_contest(contest):
 
 def init():
     """atcoder用のディレクトリを作成する
+    config.py
+        atcoder_dir = '/path/to/atcoder-dir/'
+        template_file = '/path/to/atcoder-dir/templates/file'
     """
     base_dir = './atcoder/'
     if not os.path.exists(base_dir):
@@ -99,3 +102,10 @@ def init():
     if not os.path.exists(template_file):
         default_template = pathlib.Path(template_file)
         default_template.touch()
+
+    config_file = base_dir + 'config.py'
+    if not os.path.exists(config_file):
+        with open(config_file, 'w') as f:
+            current_working_dir = os.getcwd()
+            default_atcoder_dir = current_working_dir + ''
+            print(current_working_dir)

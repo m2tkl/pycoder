@@ -20,7 +20,7 @@ format: ## execute format by autopep8
 	poetry run autopep8 -ivr . --exclude 'tests'
 
 type: ## execute type check by mypy
-	poetry run mypy ./src --config-file ./mypy.ini
+	poetry run mypy ./pycoder --config-file ./mypy.ini
 
 help: ## Print this help
 	@echo 'Usage: make [target]'
