@@ -4,6 +4,8 @@ from .scrape import SampleTestCases
 import os
 import pathlib
 import shutil
+import runpy
+from . import loader
 
 
 def read_file(filepath: str) -> str:
@@ -16,7 +18,7 @@ def read_file(filepath: str) -> str:
     return content
 
 
-def fetch_contet_test_cases(contest) -> Dict[str, SampleTestCases]:
+def fetch_contest_test_cases(contest) -> Dict[str, SampleTestCases]:
     """指定されたコンテストの各問題のサンプルテストケースを取得する。
     :param contest: コンテストの名前 (ex: 'abc123')
     :return 各問題のテストケース
@@ -43,14 +45,20 @@ def prepare_contest(contest):
         - abc456/
             ...
     """
-    base_dir = './atcoder/contests/'
-    contest_dir = base_dir + contest + '/'
+    user_home_dir = os.path.expanduser('~')
+    settings_file = user_home_dir + '/.pycoder/settings.py'
+    settings = loader.load_module_from_path('settings', settings_file)
+
+    contest_dir = settings.atcoder_dir + 'contests/' + contest + '/'
+
+    config = loader.load_module_from_path('config', settings.atcoder_dir + 'config.py')
+    template_path = config.template
 
     # make contest directory
     if not os.path.exists(contest_dir):
         os.makedirs(contest_dir)
 
-    contest_test_cases = fetch_contet_test_cases(contest)
+    contest_test_cases = fetch_contest_test_cases(contest)
 
     # 問題ごとのサブディレクトリを作成
     for task in contest_test_cases.keys():
@@ -61,7 +69,6 @@ def prepare_contest(contest):
         # 問題解答スクリプト用にテンプレートファイルをコピー
         main_script_path = task_dir_name + 'main.py'
         if not os.path.exists(main_script_path):
-            template_path = './atcoder/templates/default.py'
             shutil.copy(template_path, main_script_path)
 
         # テスト用のディレクトリを作成
@@ -86,9 +93,8 @@ def init():
         atcoder_dir = '/path/to/atcoder-dir/'
         template_file = '/path/to/atcoder-dir/templates/file'
     """
-    base_dir = './atcoder/'
-    if not os.path.exists(base_dir):
-        os.mkdir(base_dir)
+    current_working_dir = os.getcwd()
+    base_dir = current_working_dir + '/'
 
     contests_dir = base_dir + 'contests/'
     if not os.path.exists(contests_dir):
@@ -103,9 +109,23 @@ def init():
         default_template = pathlib.Path(template_file)
         default_template.touch()
 
+    # template file setting
     config_file = base_dir + 'config.py'
-    if not os.path.exists(config_file):
-        with open(config_file, 'w') as f:
-            current_working_dir = os.getcwd()
-            default_atcoder_dir = current_working_dir + ''
-            print(current_working_dir)
+    config = [
+        'template = ' + '\'' + template_file + '\'' + '\n',
+    ]
+    with open(config_file, 'w') as f:
+        f.writelines(config)
+
+    # pycoder setting
+    user_home_dir = os.path.expanduser('~')
+    pycoder_config_dir = user_home_dir + '/.pycoder/'
+    if not os.path.exists(pycoder_config_dir):
+        os.mkdir(pycoder_config_dir)
+
+    setting_file = pycoder_config_dir + 'settings.py'
+    setting = [
+        'atcoder_dir = ' + '\'' + base_dir + '\'' + '\n',
+    ]
+    with open(setting_file, 'w') as f:
+        f.writelines(setting)
