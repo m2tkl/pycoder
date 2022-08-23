@@ -18,7 +18,7 @@ class Commands:
         auth.logout()
 
     @staticmethod
-    def prepare(contest):
+    def contest(contest):
         """Prepare contest.
         :param contest: Coontest name
         """
@@ -45,7 +45,7 @@ class Commands:
         is_all_test_cases_passed = judge.test_all(contest, task)
         if (not is_all_test_cases_passed) and (not force):
             return
-        # judge.submit(contest, task, lang=lang)
+        judge.submit(contest, task, lang=lang)
         judge.open_submission_page(contest)
 
     @staticmethod
