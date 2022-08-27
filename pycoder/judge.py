@@ -34,6 +34,7 @@ class TestResponse(NamedTuple):
 def get_test_case_dirs(contest, task_name):
     """
     """
+    # TODO: テストケースのディレクトリを設定ファイルのパスから取得する
     test_case_root_dir = './atcoder/contests/' + \
         contest + '/' + task_name + '/tests/'
 
@@ -150,14 +151,11 @@ def submit(session_logined: Session, contest, task, lang='p'):
     try:
         res = session_logined.post(submit_url, submit_info)
         res.raise_for_status()
-        with open('./result.html', 'w') as f:
-            f.write(res.text)
     except requests.exceptions.HTTPError:
         exit(1)
 
     if res.status_code == 200:
         print('Submit succeeded!')
-        print(res.text)
     else:
         print('Submit failed...')
         exit(1)
