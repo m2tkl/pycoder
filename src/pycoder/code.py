@@ -51,7 +51,8 @@ def prepare_contest(contest):
 
     contest_dir = settings.atcoder_dir + 'contests/' + contest + '/'
 
-    config = loader.load_module_from_path('config', settings.atcoder_dir + 'config.py')
+    config = loader.load_module_from_path(
+        'config', settings.atcoder_dir + 'config.py')
     template_path = config.template
 
     # make contest directory

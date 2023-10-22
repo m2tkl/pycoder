@@ -2,6 +2,7 @@ from importlib.util import spec_from_file_location, module_from_spec
 from importlib.abc import Loader
 import sys
 
+
 def load_module_from_path(module_name: str, module_path: str):
     """dynamically import module from module name and file path.
     :param module_name: module name

@@ -5,22 +5,22 @@ MAKEFLAGS += --warn-undefined-variables
 .PHONY: $(shell egrep -o ^[a-zA-Z_-]+: $(MAKEFILE_LIST) | sed 's/://')
 
 test: ## execute pytest
-	poetry run pytest -v
+	rye run pytest -v
 
 testcov: ## execute pytest with coverage
-	poetry run pytest -v --cov=./src
+	rye run pytest -v --cov=./src
 
 testout: ## execute pytest and print output
-	poetry run pytest -v --capture=no
+	rye run pytest -v --capture=no
 
 lint: ## execute lint by flake8
-	poetry run flake8 --exclude 'tests' --show-source ./src
+	rye run flake8 --exclude 'tests' --show-source ./src
 
 format: ## execute format by autopep8
-	poetry run autopep8 -ivr . --exclude 'tests'
+	rye run autopep8 -ivr . --exclude 'tests'
 
 type: ## execute type check by mypy
-	poetry run mypy ./pycoder --config-file ./mypy.ini
+	rye run mypy ./pycoder --config-file ./mypy.ini
 
 help: ## Print this help
 	@echo 'Usage: make [target]'
