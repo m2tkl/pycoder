@@ -100,7 +100,7 @@ def run_test(test_target_path, input_path, output_path) -> TestResponse:
 
 
 def print_result(res: TestResponse, verbose=False):
-    result_color = 'green' if res.result == TestResult.OK else 'red'
+    result_color: str = 'green' if res.result == TestResult.OK else 'red'
     pprint('{}'.format(res.result.name), color=result_color)
 
     if verbose:
